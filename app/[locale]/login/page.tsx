@@ -24,7 +24,7 @@ export default async function LoginPage({
             ? 'Sign in or create your account to manage your provider profile.'
             : 'Inicia sesión o crea tu cuenta para administrar tu perfil de proveedor.'}
         </p>
-        <AuthForm locale={locale} />
+        <AuthForm />
       </div>
     </main>
   )
