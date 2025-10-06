@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { supabase } from '@/lib/supabase/client'
+import { supabaseBrowser } from '@/lib/supabase/client'
 
 type Props = {
   providerId: number | string        // Debe coincidir con el tipo de public.providers.id
@@ -69,7 +69,7 @@ export default function VideoUploader({ providerId }: Props) {
       const thumbKey = `${dir}/${id}.jpg`
 
       // Subir video
-      const { error: upV } = await supabase
+      const { error: upV } = await supabaseBrowser
         .storage
         .from('provider-videos')
         .upload(videoKey, file, { contentType: 'video/mp4', upsert: false })
@@ -77,7 +77,7 @@ export default function VideoUploader({ providerId }: Props) {
       if (upV) throw upV
 
       // Subir thumbnail
-      const { error: upT } = await supabase
+      const { error: upT } = await supabaseBrowser
         .storage
         .from('provider-video-thumbs')
         .upload(thumbKey, thumbBlob, { contentType: 'image/jpeg', upsert: false })
@@ -85,7 +85,7 @@ export default function VideoUploader({ providerId }: Props) {
       if (upT) throw upT
 
       // Insertar fila en provider_videos (queda pending_review por las RLS)
-      const { error: insErr } = await supabase.from('provider_videos').insert({
+      const { error: insErr } = await supabaseBrowser.from('provider_videos').insert({
         provider_id: providerId as any, // debe coincidir con el tipo en tu DB
         path: videoKey,
         thumb_path: thumbKey,
